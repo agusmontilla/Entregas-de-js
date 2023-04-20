@@ -1,171 +1,76 @@
-function menu(){
-alert("Bienvenido a la tienda de juegos online")
-
-let usuario = prompt("Ingrese su nombre de usuario:")
-const passwordUsuario = 1234
-
-let password = prompt("Ingrese su contraseña:")
-for(let i=0 ; 1<=3; i++){
-	if(password == passwordUsuario){
-		alert("contraseña correcta")
-		comprar()
-		break
-	}else{
-		password=prompt("Contraseña incorrecta, vuelva a intentarlo:")
-	}
-
-}
-}
 
 
-
-class Producto{
-	constructor(id, nombre, genero, precio){
-		this.id=id 
-		this.nombre=nombre	
-		this.genero=genero
-		this.precio=precio
+class producto{
+	constructor(id, imagen, nombre, precio){
+		this.id = id
+		this.nombre= nombre
+		this.imagen = imagen	
+		this.precio = precio
 	}
 }
 
-const p1 = new Producto(1,'Fifa 23', 'Deporte', 20000)
-const p2=new Producto(2, 'The last of us', 'Accion', 25000)
-const p3 =new Producto(3, 'Resident Evil 4', 'Terror', 29000)
-const p4 =new Producto(4, 'Gran Turismo 7', 'Carreras', 22000)
+const p1=new producto(1, "imagenes/fifa23.jpg" ,  "Fifa 23",20000)
+const p2=new producto(2, "imagenes/nba.jpg",  "Nba 2k23",19000)
+const p3=new producto(3, "imagenes/godofwar.webp",  "God of war Ragnarok",23000)
+const p4=new producto(4, "imagenes/thelastofus.webp",  "The last of us II",25000)
+const p5=new producto(5, "imagenes/residentevil.webp", "Resident evil 4",  24000)
+const p6=new producto(6, "imagenes/untildawn.jpg", "Until dawn",14000)
+const p7=new producto(7, "imagenes/dirt4.jpg", "Dirt 4",  15000)
+const p8=new producto(8, "imagenes/granturismo.jpg", "Gran turismo 7",  17000)
 
-const productos = [p1,p2,p3,p4]
-
-let carrito =[]
-
-
-
-
-function comprar(){
-	let comprarJuego = parseInt(prompt("Ingrese una opcion: 0)Fifa 23  1)The last of us  2)Resident Evil 4  3)Gran Turismo 7  4)Volver al menú:"))
-	console.log(comprarJuego)
-	let juego= productos[comprarJuego]
-	console.log(juego)
-	let precio=0
-	let cantidad=0
-
-	switch(comprarJuego){
-		 case 0:
-		 	cantidad = cantidad + parseInt(prompt("Ingrese la cantidad que desea comprar:")) 
-		 	precio=20000
-		 	carrito.push({juego, cantidad, precio})
-		 	console.log(carrito)
-
-		 	let seguir1 = prompt("Ingrese 1) Si quiere seguir comprando 2)Si quiere ir al detalle de compra") 
-		 	switch(seguir1){
-		 	case "1":
-                comprar()
-                break
-            case "2":
-                alert("A continuacion tiene el detalle de su compra")
-                calcularTotalCompra()
-		 	}
-		 	return
+let productos=[p1,p2,p3,p4,p5,p6,p7,p8]
+	localStorage.setItem("productos",JSON.stringify(productos));
+	
+const carrito =  []
 
 
-		 case 1:
-		 	cantidad = cantidad + parseInt(prompt("Ingrese la cantidad que desea comprar:"))
-		 	precio = 25000
-		 	carrito.push({juego, cantidad, precio})
-		 	console.log(carrito)
+let cards=document.getElementById("cartas")
 
-		 	let seguir2 = prompt("Ingrese 1) Si quiere seguir comprando 2)Si quiere ir al detalle de compra")
-		 	switch(seguir2){
-		 	case "1":
-                comprar()
-                break
-            case "2":
-                alert("A continuacion tiene el detalle de su compra")
-                calcularTotalCompra()
-		 	}
-		 	return
+	for(const producto of productos){
+		let carta = document.createElement("div")
+		carta.className = "card  col-xs-12 ,col-sm-6, col-md-6, col-lg-2"
+		carta.innerHTML =`	
+ 			<img class=" imageProductos card-img-top" src=${producto.imagen}  alt="...">
+  			<div class="card-body">
+    			<h5 class="card-title ">${producto.nombre}</h5>
+    			<p class="card-text">$${producto.precio}</p>
+    			<button id="btn${producto.id}" class="btn btn-primary aling-button"> Comprar </button>
+  			</div>
+		
 
-		 case 2:
-		 	cantidad = cantidad +parseInt(prompt("Ingrese la cantidad que desea comprar:"))
-		 	precio = 29000
-		 	carrito.push({juego, cantidad, precio})
-		 	console.log(carrito)
-
-		 	let seguir3 = prompt("Ingrese 1) Si quiere seguir comprando 2)Si quiere ir al detalle de compra")
-		 	switch(seguir3){
-		 	case "1":
-                comprar()
-                break
-            case "2":
-                alert("A continuacion tiene el detalle de su compra")
-                calcularTotalCompra()
-		 	}
-		 	return
-
-		 case 3:
-		 	cantidad = cantidad + parseInt(prompt("Ingrese la cantidad que desea comprar:"))
-		 	precio = 22000
-		 	carrito.push({juego, cantidad, precio})
-		 	console.log(carrito)
-
-		 	let seguir4 = prompt("Ingrese 1) Si quiere seguir comprando 2)Si quiere ir al detalle de compra")
-		 	switch(seguir4){
-		 	case "1":
-                comprar()
-                break
-            case "2":
-                alert("A continuacion tiene el detalle de su compra")
-                calcularTotalCompra()
-		 	}
-		 	return
-
-		 case 4:
-		 	menu()
-
-		 default:
-		 	alert("Elija una opcion correcta")
-		 	comprar()
-
-
-            } 
-                
-            
+		`
+	cards.append(carta)
 	}
 
 
 
+	productos.forEach((producto)=>{
+			document.getElementById((`btn${producto.id}`)).addEventListener("click", function(){
+				agregarAlCarrito(producto)
+			})
+
+	})
+
+function agregarAlCarrito(agregarProducto){
+	carrito.push(agregarProducto)
+	console.table(carrito)
+		sessionStorage.setItem("carrito",JSON.stringify(carrito));
+	
+	document.getElementById("verCarrito").innerHTML += `
+					
+						<tr>
+							<td>${agregarProducto.id}</td>
+							<td>${agregarProducto.nombre}</td>
+							<td>$${agregarProducto.precio}</td>
+						</tr>
+		
+	`
+
+	let totalCarrito = carrito.reduce((acumulador, elementos) => acumulador + elementos.precio, 0)
+	console.log(totalCarrito)
+	document.getElementById("totalAPagar").innerText = ` Total=$${totalCarrito} `
 
 
 
-
-function calcularTotalCompra(){
-
-carrito.forEach((carritoFinal) => {console.log(` producto: ${carritoFinal.juego}, cantidad: ${carritoFinal.cantidad}, precio: ${carritoFinal.precio} `) })
-
-
-const total= carrito.reduce((acumulador, elementos) => acumulador + elementos.precio * elementos.cantidad, 0)
-alert(`El total a pagar es: ${total}`)
-
-
-const salida = prompt("Ingrese 1)Para volver al menu principal  2)Para salir")
-if(salida== 1){
-	menu()
-
-}else if(salida==2){
-	salir()
 }
 
-
-
-} 
- 
- function salir(){
- 	alert("Gracias por su compra")
- }
-
-
- menu()
-
-
-  
-
-  
